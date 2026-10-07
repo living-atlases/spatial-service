@@ -185,10 +185,9 @@ class SimpleRegionSpec extends Specification {
 
     /**
      * parseWKT builds a ComplexRegion for multi part geometries and calls useMask, which rasterises
-     * every polygon with getOverlapGridCells, so it hangs on the #230 loop below. This is the path
+     * every polygon with getOverlapGridCells, so it hung on the #230 loop below. This is the path
      * used by GeneratePoints, TabulationUtil and TabulationGeneratorService.
      */
-    @PendingFeature(reason = '#230 regression: parseWKT of a multi part geometry with sloped edges never returns')
     def "parseWKT of a MULTIPOLYGON of triangles finishes (#230)"() {
         when:
         def out = runWithTimeout {
@@ -235,11 +234,10 @@ class SimpleRegionSpec extends Specification {
     }
 
     /**
-     * #230: with cells smaller than one degree the latitude loop "k += (int) divy" never advances.
-     * PR #231 changed the step to max(divy, 1) (which avoided the hang but skips rows); that change
-     * was then lost in 32a100b (#256 sandbox), so the endless loop is back.
+     * #230: with cells smaller than one degree the latitude loop "k += (int) divy" never advanced.
+     * PR #231 changed the step to max(divy, 1) (which avoided the hang but skipped rows); that change
+     * was then lost in 32a100b (#256 sandbox). The loop now advances one cell (divy) at a time.
      */
-    @PendingFeature(reason = '#230 regression: k += (int) divy is 0 when cells are smaller than 1 degree')
     @Unroll
     def "getOverlapGridCells finishes for a sloped polygon on a grid of #divy degree cells (#230)"() {
         given:
@@ -258,7 +256,6 @@ class SimpleRegionSpec extends Specification {
         100   | 100    | 0.01
     }
 
-    @PendingFeature(reason = '#230 regression: the sloped edge loop does not advance by divy')
     @Unroll
     def "getOverlapGridCells for a sloped polygon on a grid of #divy degree cells returns the cells it covers (#230)"() {
         given:
