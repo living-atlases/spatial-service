@@ -208,6 +208,10 @@ class TasksController {
     def status() {
         Long id = Long.parseLong(params.id)
         Map<String, Object> status = tasksService.getStatus(id)
+        if (status == null) {
+            render status: 404
+            return
+        }
 
         if (params.containsKey('last')) {
             def hist = [:]

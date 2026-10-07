@@ -1,6 +1,5 @@
 package au.org.ala.spatial
 
-import spock.lang.PendingFeature
 import spock.lang.Specification
 
 /**
@@ -17,7 +16,6 @@ class SpatialObjectsServiceSqlSpec extends Specification {
         service.spatialConfig = new SpatialConfig()
     }
 
-    @PendingFeature(reason = "wkt of several pids reads the row with GroovyResultSet.getObject(0), JDBC columns start at 1")
     def "wkt of several objects is the collected geometry"() {
         given:
         jdbc.results << [[wkt: 'MULTIPOLYGON(((1 1,1 2,2 2,2 1,1 1)),((3 3,3 4,4 4,4 3,3 3)))']]
@@ -40,7 +38,6 @@ class SpatialObjectsServiceSqlSpec extends Specification {
         jdbc.lastParameters == ['cl22', 'POLYGON((0 0,1 0,1 1,0 1,0 0))', 10]
     }
 
-    @PendingFeature(reason = "the SQL of getObjectsByIdAndIntersection(id, limit, pid) has 'AND and'")
     def "objects of a field within another object: the SQL has no repeated AND"() {
         when:
         service.getObjectsByIdAndIntersection('cl22', 10, '123')

@@ -4,7 +4,6 @@ import au.org.ala.web.AuthService
 import grails.converters.JSON
 import grails.testing.web.controllers.ControllerUnitTest
 import org.locationtech.jts.io.WKTReader
-import spock.lang.PendingFeature
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -250,7 +249,6 @@ class ShapesControllerSpec extends Specification implements ControllerUnitTest<S
         JSON.parse(response.contentAsString).id == 78
     }
 
-    @PendingFeature(reason = 'fixWkt calls union() on the invalid polygon before making it valid, union (and GeomMakeValid.makeValid) throw for a self intersecting polygon')
     def "an uploaded self intersecting polygon is made valid before it is saved"() {
         given:
         request.json = [wkt: 'POLYGON((0 0,2 2,2 0,0 2,0 0))', name: 'bow tie']
@@ -277,7 +275,6 @@ class ShapesControllerSpec extends Specification implements ControllerUnitTest<S
         JSON.parse(response.contentAsString).error.startsWith('Invalid WKT')
     }
 
-    @PendingFeature(reason = 'saveFeatureFromShapeFile renders the 400 but does not return, so it renders a second response')
     def "saving a shapefile feature without a feature index is a 400"() {
         given:
         params.shapeId = UUID.randomUUID().toString()

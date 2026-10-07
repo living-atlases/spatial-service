@@ -2,7 +2,6 @@ package au.org.ala.spatial
 
 import grails.testing.gorm.DataTest
 import grails.testing.services.ServiceUnitTest
-import spock.lang.PendingFeature
 import spock.lang.Specification
 
 /**
@@ -91,7 +90,6 @@ class DistributionsServiceSpec extends Specification implements ServiceUnitTest<
         jdbc.lastParameters == ['dr1', 'dr2', 'e']
     }
 
-    @PendingFeature(reason = "a single data_resource_uids request parameter is a String, 'as String[]' splits it into characters")
     def "a single data resource uid filters by that uid"() {
         when:
         service.queryDistributions([data_resource_uids: 'dr123'], true, 'e')
@@ -157,7 +155,6 @@ class DistributionsServiceSpec extends Specification implements ServiceUnitTest<
         !jdbc.lastSql.contains('LIMIT')
     }
 
-    @PendingFeature(reason = "the ' ORDER BY spcode' for paging is put in the parameter map instead of the SQL")
     def "paged results are sorted so that pages do not overlap (#252)"() {
         when:
         service.queryDistributions([pageSize: '10', start: '20'], true, 'e')
@@ -210,7 +207,6 @@ class DistributionsServiceSpec extends Specification implements ServiceUnitTest<
         d.imageUrl.endsWith('/distribution/map/png/3')
     }
 
-    @PendingFeature(reason = 'DistributionsService.show sets geometry = null before checking that the distribution exists')
     def "an unknown distribution with nowkt is not found"() {
         expect:
         service.show(1L, [nowkt: 'true'], 'e') == null

@@ -2,7 +2,6 @@ package au.org.ala.spatial
 
 import au.org.ala.spatial.dto.IntersectionFile
 import grails.testing.gorm.DataTest
-import spock.lang.PendingFeature
 import spock.lang.Specification
 import spock.lang.TempDir
 
@@ -76,7 +75,6 @@ class FieldLayerServiceSpec extends Specification implements DataTest {
         fieldService.calculateNextSequenceId('22') == 3
     }
 
-    @PendingFeature(reason = "calculateNextSequenceId returns '' (the id of the existing default field) when the max sequence number is 0")
     def "the second field of a layer does not reuse the id of the first"() {
         given:
         field('cl22', '22')
@@ -85,7 +83,6 @@ class FieldLayerServiceSpec extends Specification implements DataTest {
         fieldService.calculateNextSequenceId('22') == 1
     }
 
-    @PendingFeature(reason = "calculateNextSequenceId removes every occurrence of the layer id with replaceAll, not only the suffix")
     def "the sequence number is the part of the field id before the layer id"() {
         given:
         field('cl1', '1')
@@ -139,7 +136,6 @@ class FieldLayerServiceSpec extends Specification implements DataTest {
         layerService.getIntersectionFile('el1').fieldName == 'Temperature'
     }
 
-    @PendingFeature(reason = "LayerService.getLayersByCriteria casts the ResultSet 'as Layers' instead of reading its rows")
     def "getLayersByCriteria returns the matching layers"() {
         given:
         jdbc.results << [[id: 22L, name: 'aus1', displayname: 'States', displaypath: '/wms?layers=ALA:aus1', enabled: true],

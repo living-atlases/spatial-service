@@ -168,8 +168,8 @@ class LayerController {
             usage = layerUsage(params.months as Integer ?: 12).get("Total")
         }
 
-        response.setContentType("text/csv charset=UTF-8")
-        response.setHeader("Content-Disposition", "inlinefilename=ALA_Spatial_Layers.csv")
+        response.setContentType("text/csv; charset=UTF-8")
+        response.setHeader("Content-Disposition", "inline; filename=ALA_Spatial_Layers.csv")
         CSVWriter cw = null
 
         try {
@@ -524,7 +524,7 @@ class LayerController {
     }
 
     private downloadAllowed(layer) {
-        return spatialConfig.download.layer.licence_levels.contains(layer.licence_level)
+        return spatialConfig.download.layer.licence_levels.contains(layer?.licence_level)
     }
 
     // HTML Page
@@ -581,7 +581,7 @@ class LayerController {
                 render layerService.getLayers() as JSON
             }
         else
-            show(id)
+            show()
     }
 
     @Operation(
@@ -768,7 +768,7 @@ class LayerController {
             sb.append("<collection type=\"dataset\">")
             sb.append("<identifier type=\"local\">ala.org.au/uid_" + layer.getUid() + "</identifier>")
             sb.append("<name type=\"abbreviated\">")
-            sb.append("<namePart>" + layer.getName() + "</namePart>")
+            sb.append("<namePart>" + StringEscapeUtils.escapeXml(layer.getName()) + "</namePart>")
             sb.append("</name>")
             sb.append("<name type=\"alternative\">")
             sb.append("<namePart><![CDATA[" + layer.getDescription() + "]]></namePart>")
@@ -788,9 +788,9 @@ class LayerController {
             sb.append("<relation type=\"hasCollector\" />")
             sb.append("</relatedObject>")
             sb.append("<subject type=\"anzsrc-for\">0502</subject>")
-            sb.append("<subject type=\"local\">" + layer.getClassification1() + "</subject>")
+            sb.append("<subject type=\"local\">" + StringEscapeUtils.escapeXml(layer.getClassification1()) + "</subject>")
             if (!StringUtils.isEmpty(layer.getClassification2())) {
-                sb.append("<subject type=\"local\">" + layer.getClassification2() + "</subject>")
+                sb.append("<subject type=\"local\">" + StringEscapeUtils.escapeXml(layer.getClassification2()) + "</subject>")
             }
             sb.append("<description type=\"full\"><![CDATA[" + layer.getNotes() + "]]></description>")
             sb.append("<relatedInfo type=\"website\">")

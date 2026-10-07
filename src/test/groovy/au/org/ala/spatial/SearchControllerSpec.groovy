@@ -2,7 +2,6 @@ package au.org.ala.spatial
 
 import au.org.ala.spatial.dto.SearchObject
 import grails.testing.web.controllers.ControllerUnitTest
-import spock.lang.PendingFeature
 import spock.lang.Specification
 
 /**
@@ -82,7 +81,6 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
         1 * searchService.findByCriteria('act', 0, 20, [], ['cl22']) >> []
     }
 
-    @PendingFeature(reason = 'search renders the 404 for a missing q but does not return, so it searches for "null"')
     def "a search without q is a 404 and does not search"() {
         when:
         controller.search()
@@ -92,7 +90,6 @@ class SearchControllerSpec extends Specification implements ControllerUnitTest<S
         response.status == 404
     }
 
-    @PendingFeature(reason = "the already decoded q is decoded again, UriUtils.decode throws IllegalArgumentException for a '%' that is not an escape and only UnsupportedEncodingException is caught")
     def "a q with a percent sign is searched"() {
         given:
         params.q = '50% cover'

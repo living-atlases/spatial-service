@@ -4,7 +4,6 @@ import com.opencsv.CSVReader
 import grails.testing.gorm.DataTest
 import grails.testing.web.controllers.ControllerUnitTest
 import org.springframework.http.MediaType
-import spock.lang.PendingFeature
 import spock.lang.Specification
 
 /**
@@ -49,7 +48,6 @@ class LayerControllerSpec extends Specification implements ControllerUnitTest<La
         response.json*.name == ['aus1', 'aus2']
     }
 
-    @PendingFeature(reason = 'index calls show(id) but show() takes no arguments: MissingMethodException')
     def "index with an id shows that layer"() {
         given:
         params.id = '22'
@@ -148,7 +146,6 @@ class LayerControllerSpec extends Specification implements ControllerUnitTest<La
         rows[2][19] ==~ /2020\/01\/3[01]/
     }
 
-    @PendingFeature(reason = "csvlist sets the content type 'text/csv charset=UTF-8' and the header 'inlinefilename=...' (missing ';')")
     def "layers.csv is served as UTF-8 text/csv with a file name"() {
         when:
         controller.csvlist()
@@ -173,7 +170,6 @@ class LayerControllerSpec extends Specification implements ControllerUnitTest<La
         xml.registryObject[1].collection.name.find { it.@type == 'abbreviated' }.namePart.text() == 'aus2'
     }
 
-    @PendingFeature(reason = "rif-cs writes the layer name and classifications into the XML without escaping '&' and '<'")
     def "rif-cs is well formed XML for metadata with '&' and '<'"() {
         when:
         controller.'rif-cs'()
@@ -202,7 +198,6 @@ class LayerControllerSpec extends Specification implements ControllerUnitTest<La
         '3'   | false
     }
 
-    @PendingFeature(reason = 'more calls downloadAllowed(null) for an unknown layer: NullPointerException')
     def "more of an unknown layer does not fail"() {
         given:
         params.id = 'nothing'

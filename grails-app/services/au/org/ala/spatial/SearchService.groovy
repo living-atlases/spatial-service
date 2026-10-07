@@ -120,6 +120,7 @@ class SearchService {
                         (excludeFieldIds == null || excludeFieldIds.isEmpty() || !excludeFieldIds.contains(f.getFieldId()))) {
                     //search
                     for (Entry<Integer, GridClass> c : f.getClasses().entrySet()) {
+                        if (search.size() >= limit) break
                         if ((c.getValue().getName().toLowerCase().indexOf(criteria)) >= 0) {
                             search.add(new SearchObject([
                                     pid        : f.getLayerPid() + ':' + c.getKey(),

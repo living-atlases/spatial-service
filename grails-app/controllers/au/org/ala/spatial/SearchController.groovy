@@ -102,13 +102,14 @@ class SearchController {
 
         if (q == null) {
             render status: 404, text: 'No search parameter q.'
+            return
         }
         try {
             q = UriUtils.decode(q.toString(), Charset.defaultCharset())
-            q = q.trim().toLowerCase()
-        } catch (UnsupportedEncodingException ignored) {
-            render status: 404
+        } catch (IllegalArgumentException ignored) {
+            // q is already decoded
         }
+        q = q.toString().trim().toLowerCase()
 
         // Results can differ greatly between the old and new search methods.
         if (StringUtils.isEmpty(includeFieldIds) && StringUtils.isEmpty(excludeFieldIds)) {

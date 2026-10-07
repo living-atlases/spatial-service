@@ -4,7 +4,6 @@ import au.org.ala.spatial.dto.Tabulation
 import com.opencsv.CSVReader
 import grails.converters.JSON
 import grails.testing.services.ServiceUnitTest
-import spock.lang.PendingFeature
 import spock.lang.Specification
 
 /**
@@ -84,7 +83,6 @@ class TabulationServiceFormatSpec extends Specification implements ServiceUnitTe
         rows[4].subList(1, 4).collect { (it as double).round(6) } == [0.3d, 1.3d, 1.6d]
     }
 
-    @PendingFeature(reason = 'the area totals are the sum of the rounded cells written with Double.toString, e.g. 0.30000000000000004')
     def "area CSV totals are written with one decimal like the cells"() {
         when:
         def rows = csv(service().generateTabulationCSVHTML('cl1', 'cl2', null, 'area', 'csv'))
@@ -156,7 +154,6 @@ class TabulationServiceFormatSpec extends Specification implements ServiceUnitTe
         json.Z.B == 1.3
     }
 
-    @PendingFeature(reason = 'the JSON escapes a double quote in an object name as "" (CSV style) instead of \\"')
     def "JSON is valid for object names with double quotes"() {
         given:
         tabulations[0].name1 = tabulations[1].name1 = 'Murray "Darling"'

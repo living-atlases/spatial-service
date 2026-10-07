@@ -31,7 +31,7 @@ class Tabulation {
     Double area
 
     @Hidden
-    Geometry geometry
+    String geometry
 
     Integer occurrences
     Integer species

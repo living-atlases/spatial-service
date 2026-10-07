@@ -4,7 +4,6 @@ import au.org.ala.web.AuthService
 import grails.converters.JSON
 import grails.testing.gorm.DataTest
 import grails.testing.web.controllers.ControllerUnitTest
-import spock.lang.PendingFeature
 import spock.lang.Specification
 import spock.lang.TempDir
 
@@ -95,7 +94,6 @@ class TasksControllerStatusSpec extends Specification implements ControllerUnitT
         response.json.output[0].name == 'files'
     }
 
-    @PendingFeature(reason = 'status does not check for an unknown task: NullPointerException on status.history')
     def "status of an unknown task is a 404"() {
         given:
         params.id = '404'

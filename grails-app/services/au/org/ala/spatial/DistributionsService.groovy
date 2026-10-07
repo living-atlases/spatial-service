@@ -63,7 +63,7 @@ class DistributionsService {
             eq('type', type)
         } as Distributions
 
-        if (noWkt) {
+        if (noWkt && distribution) {
             distribution.geometry = null
         }
 
@@ -91,7 +91,7 @@ class DistributionsService {
 
         String lsids = queryParams.lsids
         Integer geomIdx = queryParams.geom_idx as Integer ?: -1 as Integer
-        String[] dataResources = queryParams.data_resource_uids as String[]
+        String[] dataResources = queryParams.data_resource_uids instanceof String ? [queryParams.data_resource_uids] as String[] : queryParams.data_resource_uids as String[]
 
         if (queryParams.pid) {
             wkt = spatialObjectsService.getObjectsGeometryById(queryParams.pid as String, 'wkt')
@@ -125,7 +125,7 @@ class DistributionsService {
 
         if (queryParams.pageSize) {
             int start = queryParams.start as Integer ?: 0
-            sql += " LIMIT :pageSize OFFSET :offset"
+            sql += " ORDER BY spcode LIMIT :pageSize OFFSET :offset"
             params.put("pageSize", queryParams.pageSize as Integer)
             params.put("offset", start)
 

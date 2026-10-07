@@ -4,7 +4,6 @@ import au.org.ala.spatial.dto.MapDTO
 import grails.converters.JSON
 import grails.testing.gorm.DataTest
 import grails.testing.web.controllers.ControllerUnitTest
-import spock.lang.PendingFeature
 import spock.lang.Specification
 
 /**
@@ -73,7 +72,6 @@ class DistributionControllerSpec extends Specification implements ControllerUnit
         response.status == 200
     }
 
-    @PendingFeature(reason = "replace('https:/', 'https://') turns an lsid that already has 'https://' into 'https:///'")
     def "lsid leaves an https lsid that already has '//' unchanged"() {
         given:
         params.lsid = 'https://biodiversity.org.au/afd/taxa/0c3e2403'
@@ -97,7 +95,6 @@ class DistributionControllerSpec extends Specification implements ControllerUnit
         1 * distributionsService.queryDistributions(_, true, 'e') >> [distribution(1, 'x')]
     }
 
-    @PendingFeature(reason = "'params.nowkt as Boolean' is true for the string 'false'")
     def "lsid with nowkt=false returns the geometry"() {
         given:
         params.lsid = 'urn:x'
@@ -170,7 +167,6 @@ class DistributionControllerSpec extends Specification implements ControllerUnit
         response.status == 404
     }
 
-    @PendingFeature(reason = 'Long.parseLong throws for a non numeric id, the null check for the 400 is never reached')
     def "show of a non numeric id is a 400"() {
         given:
         params.id = 'abc'

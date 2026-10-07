@@ -700,7 +700,7 @@ class SpatialObjectsService {
     List<SpatialObjects> getObjectsByIdAndIntersection(String id, Integer limit, String intersectingPid) {
         String sql = "SELECT o.pid, o.name, o.desc AS description, o.fid AS fid, f.name AS fieldname, o.bbox, " +
                 "o.area_km, GeometryType(o.the_geom) as featureType FROM objects o inner join fields f on o.fid = f.id , (select the_geom as g from Objects where pid = ? ) t " +
-                "WHERE o.fid = ? AND and ST_Within(the_geom, g) limit ? "
+                "WHERE o.fid = ? AND ST_Within(the_geom, g) limit ? "
 
         List<SpatialObjects> objects = []
         Sql.newInstance(dataSource).query(sql, [intersectingPid, id, limit], { result ->
@@ -897,7 +897,7 @@ class SpatialObjectsService {
 
                 String query = "select st_astext(st_collect(geom)) as wkt from (select (st_dump(the_geom)).geom as geom from objects where pid in ('" + ids.join("','") + "')) tmp"
                 Sql.newInstance(dataSource).eachRow(query, { GroovyResultSet row ->
-                    os.write(row.getObject(0).toString().bytes)
+                    os.write(row.getObject('wkt').toString().bytes)
                 })
             } else {
                 streamObjectsGeometryById(os, cleanObjectId(id).toString(), 'wkt')

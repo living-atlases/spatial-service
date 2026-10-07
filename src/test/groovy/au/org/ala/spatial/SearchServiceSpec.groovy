@@ -4,7 +4,6 @@ import au.org.ala.spatial.dto.GridClass
 import au.org.ala.spatial.dto.IntersectionFile
 import au.org.ala.spatial.dto.SearchObject
 import grails.testing.services.ServiceUnitTest
-import spock.lang.PendingFeature
 import spock.lang.Specification
 
 /**
@@ -112,7 +111,6 @@ class SearchServiceSpec extends Specification implements ServiceUnitTest<SearchS
         result.empty
     }
 
-    @PendingFeature(reason = 'addGridClassesToSearch adds every matching grid class when there is space left, ignoring limit')
     def "no more than limit results are returned"() {
         given:
         jdbc.results << [row('1', 'Rainbow Beach')]

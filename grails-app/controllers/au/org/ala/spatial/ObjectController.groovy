@@ -79,6 +79,9 @@ class ObjectController {
 
     private static def getEnvelope(String envelopeTaskId) {
         def task = Task.get(envelopeTaskId)
+        if (task == null) {
+            return null
+        }
 
         for (def output : task.output) {
             if ("area" == output.name) {
@@ -140,8 +143,8 @@ class ObjectController {
     @Produces("application/json")
     def listByLocation() {
         String fid = params.fid ?: params.id
-        Double lat = Double.parseDouble(params.lat)
-        Double lng = Double.parseDouble(params.lng)
+        Double lat = params.double('lat')
+        Double lng = params.double('lng')
 
         if (lat == null) {
             render status: 400, text: "Path parameter `lat` is not a number."
@@ -326,8 +329,8 @@ class ObjectController {
     @Produces("application/json")
     def intersectObject() {
         String pid = params.pid
-        Double lat = Double.parseDouble(params.lat)
-        Double lng = Double.parseDouble(params.lng)
+        Double lat = params.double('lat')
+        Double lng = params.double('lng')
         if (lat == null) {
             render status: 400, text: "Path parameter `lat` is not a number."
             return
@@ -427,7 +430,7 @@ class ObjectController {
             render inAllGroups as JSON
         } else if (wkt.startsWith("OBJECT(")) {
             String pid = wkt.substring("OBJECT(".length(), wkt.length() - 1)
-            render spatialObjectsService.getObjectsByIdAndIntersection(fid, limit, LayerFilter.parseLayerFilter(pid)) as JSON
+            render spatialObjectsService.getObjectsByIdAndIntersection(fid, limit, pid) as JSON
         } else if (wkt.startsWith("GEOMETRYCOLLECTION")) {
             List<String> collectionParts = SpatialConversionUtils.getGeometryCollectionParts(wkt)
 

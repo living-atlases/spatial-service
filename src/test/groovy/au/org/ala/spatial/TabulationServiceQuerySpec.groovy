@@ -4,7 +4,6 @@ import au.org.ala.spatial.dto.GridClass
 import au.org.ala.spatial.dto.IntersectionFile
 import au.org.ala.spatial.dto.Tabulation
 import grails.testing.services.ServiceUnitTest
-import spock.lang.PendingFeature
 import spock.lang.Specification
 
 /**
@@ -86,7 +85,6 @@ class TabulationServiceQuerySpec extends Specification implements ServiceUnitTes
         list*.name2 == ['Rainforest', 'Desert']
     }
 
-    @PendingFeature(reason = 'getTabulation assigns the WKT string from ST_AsText to Tabulation.geometry, which is a JTS Geometry; the recalculated area is also in sq m, not sq km')
     def "a tabulation within an area recalculates the area of each intersection"() {
         given:
         layerService.getIntersectionFile(_) >> { String id -> file(id, 'c') }
@@ -125,7 +123,6 @@ class TabulationServiceQuerySpec extends Specification implements ServiceUnitTes
         list[0].area == 2358d
     }
 
-    @PendingFeature(reason = "getTabulationSingle never initialises the 'tabulations' list for an area (NullPointerException on the first row), assigns a WKT string to the JTS Geometry and calculates the area in sq m, not sq km")
     def "a single tabulation of a contextual field within a pid has the area of each intersection"() {
         given:
         layerService.getIntersectionFile('cl22') >> file('cl22', 'c')
@@ -142,7 +139,6 @@ class TabulationServiceQuerySpec extends Specification implements ServiceUnitTes
         list[0].geometry == null
     }
 
-    @PendingFeature(reason = "getTabulationSingle never initialises the 'tabulations' list for an area (NullPointerException on the first row), assigns a WKT string to the JTS Geometry and calculates the area in sq m, not sq km")
     def "a single tabulation of a contextual field within a wkt has the area of each intersection"() {
         given:
         layerService.getIntersectionFile('cl22') >> file('cl22', 'c')

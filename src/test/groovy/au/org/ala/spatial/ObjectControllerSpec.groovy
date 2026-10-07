@@ -3,7 +3,6 @@ package au.org.ala.spatial
 import au.org.ala.spatial.dto.LayerFilter
 import grails.testing.gorm.DataTest
 import grails.testing.web.controllers.ControllerUnitTest
-import spock.lang.PendingFeature
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -90,7 +89,6 @@ class ObjectControllerSpec extends Specification implements ControllerUnitTest<O
         response.status == 404
     }
 
-    @PendingFeature(reason = 'getEnvelope does not check that the task exists: NullPointerException on task.output')
     def "show of an unknown envelope task is a 404"() {
         given:
         params.pid = 'ENVELOPE987654'
@@ -173,7 +171,6 @@ class ObjectControllerSpec extends Specification implements ControllerUnitTest<O
         response.status == 404
     }
 
-    @PendingFeature(reason = 'Double.parseDouble throws for a non numeric lat, the null check for the 400 is never reached')
     def "listByLocation with a non numeric lat is a 400"() {
         given:
         params.fid = 'cl22'
@@ -188,7 +185,6 @@ class ObjectControllerSpec extends Specification implements ControllerUnitTest<O
         0 * spatialObjectsService._
     }
 
-    @PendingFeature(reason = 'Double.parseDouble throws for a non numeric lng, the null check for the 400 is never reached')
     def "intersectObject with a non numeric lng is a 400"() {
         given:
         params.pid = '123'
@@ -278,7 +274,6 @@ class ObjectControllerSpec extends Specification implements ControllerUnitTest<O
         response.json*.pid == ['1', '3']
     }
 
-    @PendingFeature(reason = 'objectsInArea parses the pid as a LayerFilter (a layer named after the pid) instead of using the objects within that object')
     def "objectsInArea with a pid returns the objects within that object"() {
         given:
         params.fid = 'cl22'

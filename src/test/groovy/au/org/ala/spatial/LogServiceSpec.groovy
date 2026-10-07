@@ -1,7 +1,6 @@
 package au.org.ala.spatial
 
 import grails.testing.services.ServiceUnitTest
-import spock.lang.PendingFeature
 import spock.lang.Specification
 
 /**
@@ -70,7 +69,6 @@ class LogServiceSpec extends Specification implements ServiceUnitTest<LogService
                 .contains("created between '2023-01-01' and '2023-12-31'")
     }
 
-    @PendingFeature(reason = "endDate=now formats an Instant with ISO_LOCAL_DATE: UnsupportedTemporalTypeException")
     def "endDate=now is today"() {
         when:
         String where = service.where([startDate: '2023-01-01', endDate: 'now'], 'u1', false)
@@ -117,7 +115,6 @@ class LogServiceSpec extends Specification implements ServiceUnitTest<LogService
         result == [[category2: 'Area', records: 3]]
     }
 
-    @PendingFeature(reason = 'LogService.search reads the ResultSet with if (rs.next()) instead of while, so only the first row is returned')
     def "a search returns every row"() {
         given:
         jdbc.results << [[category2: 'Area', records: 3], [category2: 'Tabulation', records: 2]]

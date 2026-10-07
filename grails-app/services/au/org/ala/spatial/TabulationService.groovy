@@ -211,7 +211,7 @@ class TabulationService {
                     }
                 } else {
                     if (func == "area") {
-                        sb.append("," + sumOfColumns[i - 1])
+                        sb.append("," + String.format(Locale.US, "%.1f", sumOfColumns[i - 1]))
                     } else if (func == "occurrences" || func == "species") {
                         sb.append("," + sumOfColumns[i - 1])
                     }
@@ -227,13 +227,13 @@ class TabulationService {
             }
             for (int j = 1; j < grid[0].length; j++) {
                 if (func == "area") {
-                    sb.append("," + sumOfRows[j - 1])
+                    sb.append("," + String.format(Locale.US, "%.1f", sumOfRows[j - 1]))
                 } else if (func == "occurrences" || func == "species") {
                     sb.append("," + sumOfRows[j - 1])
                 }
             }
             if (func == "area") {
-                sb.append("," + Total)
+                sb.append("," + String.format(Locale.US, "%.1f", Total))
             } else if (func == "occurrences") {
                 sb.append("," + Total)
             } else {
@@ -246,11 +246,11 @@ class TabulationService {
             sb.append("{")
             for (int i = 1; i < grid.length; i++) {
                 if (grid[i][0])
-                    sb.append("\"").append(grid[i][0].replace("\"", "\"\"")).append('\":')
+                    sb.append("\"").append(grid[i][0].replace("\"", "\\\"")).append('\":')
                 sb.append("{")
                 for (int j = 1; j < grid[i].length; j++) {
                     if (grid[i][j]) {
-                        sb.append("\"").append(grid[0][j].replace("\"", "\"\"")).append('\":')
+                        sb.append("\"").append(grid[0][j].replace("\"", "\\\"")).append('\":')
                         sb.append(grid[i][j])
                         sb.append(",")
                     }
@@ -283,7 +283,7 @@ class TabulationService {
 
             sb.append("{")
             for (int j = 1; j < grid[0].length; j++) {
-                sb.append("\"").append(grid[0][j].replace("\"", "\"\"")).append('\":')
+                sb.append("\"").append(grid[0][j].replace("\"", "\\\"")).append('\":')
                 if (func == "area") {
                     sb.append(sumOfRows[j - 1] + ",")
                 } else if (func == "occurrences" || func == "species") {
@@ -423,7 +423,7 @@ class TabulationService {
 
             for (Tabulation t : (tabulations as List<Tabulation>)) {
                 try {
-                    t.setArea(SpatialUtils.calculateArea(t.getGeometry()))
+                    t.setArea(SpatialUtils.calculateArea(t.getGeometry()) / 1000000.0)
                     t.setOccurrences(TabulationUtil.calculateOccurrences(spatialConfig.occurrence_species_records_filename, t.getGeometry()))
                     t.setSpecies(TabulationUtil.calculateSpecies(spatialConfig.occurrence_species_records_filename, t.getGeometry()))
                 } catch (Exception e) {
@@ -486,7 +486,7 @@ class TabulationService {
         if (f.getType().equalsIgnoreCase("c")) {
             if (wkt.length() > 0) {
                 String sql
-                List<Tabulation> tabulations
+                List<Tabulation> tabulations = []
 
                 if (isPid) {
                     sql = "SELECT fid1, pid1, name1," + " fid2, pid2, name2, " + " ST_AsText(newgeom) as geometry FROM " + "(" + "SELECT a.fid as fid1, a.pid as pid1, a.name as name1, b.fid as fid2, b.pid as pid2, b.name as name2 " + ", (ST_INTERSECTION(b.the_geom, a.the_geom)) as newgeom FROM " + "(SELECT * FROM objects WHERE fid = ? ) a, (SELECT * FROM objects WHERE pid = ? ) b " + "WHERE ST_INTERSECTS(ST_GEOMFROMTEXT(a.bbox, 4326), ST_GEOMFROMTEXT(b.bbox ,4326))" + ") o " + "WHERE newgeom is not null AND ST_Area(newgeom) > 0"
@@ -523,7 +523,7 @@ class TabulationService {
 
 
                 for (Tabulation t : (tabulations as List<Tabulation>)) {
-                    t.setArea(SpatialUtils.calculateArea(t.getGeometry()))
+                    t.setArea(SpatialUtils.calculateArea(t.getGeometry()) / 1000000.0)
 
                     //don't return geometry
                     t.setGeometry(null)
