@@ -7,7 +7,6 @@ import au.org.ala.spatial.Layers
 import au.org.ala.spatial.SpatialConfig
 import groovy.sql.Sql
 import org.grails.orm.hibernate.HibernateDatastore
-import spock.lang.PendingFeature
 import spock.lang.Requires
 import spock.lang.Shared
 import spock.lang.Specification
@@ -141,13 +140,6 @@ class FieldLayerServiceIntegrationSpec extends Specification {
         inSession { layerService.getLayerByName('disabled', false) }?.id == 3
     }
 
-    /**
-     * LayerService.getLayersByCriteria (GET /layers/search?q=) passes the ResultSet to the query
-     * closure and does "it as Layers", which throws GroovyCastException instead of iterating and
-     * mapping the rows. FieldService.getLayersByCriteria (a different method, GET /fields/search)
-     * does the join correctly.
-     */
-    @PendingFeature(reason = 'LayerService.getLayersByCriteria casts the ResultSet to Layers instead of iterating it')
     @Unroll
     def "getLayersByCriteria(#keywords) matches enabled layers #expected"() {
         expect:

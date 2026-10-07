@@ -10,7 +10,6 @@ import au.org.ala.spatial.SpatialConfig
 import au.org.ala.spatial.SpatialObjectsService
 import groovy.sql.Sql
 import org.locationtech.jts.io.WKTReader
-import spock.lang.PendingFeature
 import spock.lang.Requires
 import spock.lang.Shared
 import spock.lang.Specification
@@ -126,8 +125,6 @@ class SpatialObjectsServiceIntegrationSpec extends Specification {
         'cl1' | 120.0 | -30.0 | null
     }
 
-    /** Azimuth() was a PostGIS 1.x alias; PostGIS 2+ only has ST_Azimuth. */
-    @PendingFeature(reason = 'getNearestObjectByIdAndLocation calls Azimuth(), which PostGIS 3 does not have')
     def "getNearestObjectByIdAndLocation orders points by distance and returns distance and bearing"() {
         when:
         def nearest = service.getNearestObjectByIdAndLocation('cl2', 2, 149.0, -35.0)
@@ -144,7 +141,6 @@ class SpatialObjectsServiceIntegrationSpec extends Specification {
                 ['Canberra', 'Melbourne']
     }
 
-    @PendingFeature(reason = 'the SQL of getObjectsByIdAndIntersection(String, Integer, String) has "AND and"')
     def "getObjectsByIdAndIntersection returns the objects within another object"() {
         expect:
         service.getObjectsByIdAndIntersection('cl2', 10, '101')*.name == ['Canberra']
@@ -228,8 +224,6 @@ class SpatialObjectsServiceIntegrationSpec extends Specification {
         service.getUserUploadedObjectUserId(pid as int) == null
     }
 
-    /** Sql.execute returns whether the first result is a ResultSet, which is false for an UPDATE. */
-    @PendingFeature(reason = 'updateUserUploadedObject returns the result of Sql.execute, always false for an UPDATE')
     def "updateUserUploadedObject reports success"() {
         given:
         String pid = service.createUserUploadedObject('POLYGON((150 -35,150 -34,151 -34,151 -35,150 -35))', 'A', 'd', 'user1')
