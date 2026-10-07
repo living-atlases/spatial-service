@@ -4,7 +4,6 @@ import org.locationtech.jts.geom.Envelope
 import org.locationtech.jts.geom.Geometry
 import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.io.WKTReader
-import spock.lang.PendingFeature
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -84,11 +83,7 @@ class SimpleRegionSpec extends Specification {
         !r.isWithin(9, 9)
     }
 
-    /**
-     * The box test compares points.size() (number of values) with 5 instead of 10, so closed rings
-     * always take the polygon path. (Fixing only that exposes setBox's bounding box, see below.)
-     */
-    @PendingFeature(reason = 'parseSimpleRegion only detects boxes written with 4 points, not closed 5 point rings')
+    /** The box test compared points.size() (number of values) with 5 instead of 10. */
     def "parseSimpleRegion detects an axis aligned box"() {
         when:
         SimpleRegion r = SimpleRegion.parseSimpleRegion('1 2,1 4,3 4,3 2,1 2')
@@ -99,10 +94,9 @@ class SimpleRegionSpec extends Specification {
     }
 
     /**
-     * setBox stores the bounding box as [[minLon, maxLon], [minLat, maxLat]] while getBoundingBox()
+     * setBox stored the bounding box as [[minLon, maxLon], [minLat, maxLat]] while getBoundingBox()
      * users (GridCutterService, ComplexRegion, getOverlapGridCells_Box) expect [[minLon, minLat], [maxLon, maxLat]].
      */
-    @PendingFeature(reason = 'setBox stores the bounding box transposed')
     def "a box written with 4 points has the same bounding box and grid cells as the polygon"() {
         given:
         SimpleRegion box = SimpleRegion.parseSimpleRegion('2 2,2 6,6 6,6 2')
@@ -164,10 +158,9 @@ class SimpleRegionSpec extends Specification {
     }
 
     /**
-     * parseGeometryCollection keeps the opening bracket of each ring ("(10 10,...") so the first
-     * longitude fails to parse and silently becomes 0 (and the resulting sloped edge then hits #230).
+     * parseGeometryCollection kept the opening bracket of each ring ("(10 10,...") so the first
+     * longitude failed to parse and silently became 0.
      */
-    @PendingFeature(reason = 'parseGeometryCollection passes the ring with its opening bracket, so the first coordinate is read as 0')
     def "parseWKT reads the polygons of a GEOMETRYCOLLECTION"() {
         when:
         def out = runWithTimeout {
