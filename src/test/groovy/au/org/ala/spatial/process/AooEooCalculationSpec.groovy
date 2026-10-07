@@ -2,7 +2,6 @@ package au.org.ala.spatial.process
 
 import org.locationtech.jts.geom.Geometry
 import org.locationtech.jts.io.WKTReader
-import spock.lang.PendingFeature
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -42,12 +41,7 @@ class AooEooCalculationSpec extends Specification {
         gridSize << [0.02, 0.1, 1]
     }
 
-    /**
-     * AooEoo.round truncates towards zero and only subtracts one cell when the truncated value is
-     * already negative, so -0.5 goes to cell 0 and -1.0 goes to cell -2. Points west of Greenwich or
-     * south of the equator (all of Australia) can be counted in the wrong cell.
-     */
-    @PendingFeature(reason = 'AooEoo.round does not floor negative coordinates')
+    /** Points west of Greenwich or south of the equator (all of Australia). */
     @Unroll
     def "points with negative coordinates fall in their own #gridSize degree AOO cell"() {
         expect:
@@ -57,7 +51,6 @@ class AooEooCalculationSpec extends Specification {
         gridSize << [0.02, 0.1, 1]
     }
 
-    @PendingFeature(reason = 'AooEoo.round does not floor negative coordinates')
     @Unroll
     def "round(#d, #by) is the start of the cell that contains #d"() {
         expect:
@@ -71,7 +64,7 @@ class AooEooCalculationSpec extends Specification {
     }
 
     @Unroll
-    def "round(#d, #by) is the start of the cell that contains #d (positive and already working cases)"() {
+    def "round(#d, #by) is the start of the cell that contains #d (positive coordinates)"() {
         expect:
         AooEoo.round(d, by) == (float) expected
 
@@ -83,7 +76,6 @@ class AooEooCalculationSpec extends Specification {
         2.75 | 0.5 | 2.5
     }
 
-    @PendingFeature(reason = 'AooEoo.round maps -0.5 and 0.5 to the same cell')
     def "two points on either side of the equator are two AOO cells"() {
         expect:
         AooEoo.aooProcess(['-0.5,10.5', '0.5,10.5'] as String[], 1).size() == 2
