@@ -1,6 +1,5 @@
 package au.org.ala.spatial.intersect
 
-import spock.lang.PendingFeature
 import spock.lang.Specification
 import spock.lang.TempDir
 
@@ -92,11 +91,7 @@ ${header.units ? 'Units=' + header.units : ''}
         Float.isNaN(v[3])
     }
 
-    /**
-     * When the header says ResolutionX=1 the constructor recalculates the resolution from the extents,
-     * but divides the width by the number of rows and the height by the number of columns.
-     */
-    @PendingFeature(reason = 'Grid(String) uses nrows for xres and ncols for yres when ResolutionX=1')
+    /** When the header says ResolutionX=1 the constructor recalculates the resolution from the extents. */
     def "the resolution is recalculated from the extents of a non square grid"() {
         given: 'a 4 x 2 degree extent with 2 columns and 1 row (2 degree cells) but ResolutionX=1'
         String path = writeGrid('r', [ncols: 2, nrows: 1, xmin: 0, xmax: 4, ymin: 0, ymax: 2, xres: 1, yres: 1],
@@ -110,8 +105,7 @@ ${header.units ? 'Units=' + header.units : ''}
         g.yres == 2
     }
 
-    /** The recalculation above also hits real 1 degree grids, which then read the wrong cells. */
-    @PendingFeature(reason = 'Grid(String) uses nrows for xres and ncols for yres when ResolutionX=1')
+    /** The recalculation above also applies to real 1 degree grids. */
     def "getValues of a 1 degree grid that is not square"() {
         given: '3 columns x 2 rows of 1 degree'
         String path = writeGrid('one', [ncols: 3, nrows: 2, xmin: 110, xmax: 113, ymin: -40, ymax: -38, xres: 1, yres: 1],
@@ -137,11 +131,7 @@ ${header.units ? 'Units=' + header.units : ''}
         g.getValues([[0.25, 0.25]] as double[][]) == [250] as float[]
     }
 
-    /**
-     * "1/10 degC" means the stored values are tenths, but the scale factor is cast to long, so
-     * 1 / 10 becomes 0 and every value reads as 0.
-     */
-    @PendingFeature(reason = "Grid.readgrd casts the '1/N' scale factor to long, which is 0 for N > 1")
+    /** "1/10 degC" means the stored values are tenths. */
     def "units '1/N unit' rescale the values"() {
         given:
         String path = writeGrid('f', [ncols: 1, nrows: 1, xmin: 0, xmax: 0.5, ymin: 0, ymax: 0.5, xres: 0.5, yres: 0.5, units: '1/10 degC'],
