@@ -12,7 +12,6 @@ import org.locationtech.jts.geom.Point
 import org.locationtech.jts.geom.Polygon
 import org.locationtech.jts.io.WKTReader
 import org.opengis.feature.simple.SimpleFeature
-import spock.lang.PendingFeature
 import spock.lang.Specification
 import spock.lang.TempDir
 import spock.lang.Unroll
@@ -307,7 +306,6 @@ class SpatialConversionUtilsSpec extends Specification {
      * extractZippedShapeFile throws "Invalid archive. Must contain .shp, .shx and .dbf" but catches
      * its own exception and then returns the .shp anyway, so the check has no effect.
      */
-    @PendingFeature(reason = 'extractZippedShapeFile catches its own "Invalid archive" exception and still returns the .shp')
     def "extractZippedShapeFile returns null for an archive without .shx and .dbf"() {
         given:
         File zip = new File(tmp, 'only-shp.zip')

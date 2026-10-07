@@ -1,6 +1,5 @@
 package au.org.ala.spatial.grid
 
-import spock.lang.PendingFeature
 import spock.lang.Specification
 import spock.lang.TempDir
 import spock.lang.Unroll
@@ -56,7 +55,6 @@ class GridClassBuilderSpec extends Specification {
     }
 
     /** Class labels come from layer attribute values and are written into the XML without escaping. */
-    @PendingFeature(reason = 'GridClassBuilder.exportSLD does not escape the class labels, so "&", "<" or \'"\' make the SLD invalid XML')
     def "exportSLD writes labels with XML special characters as a valid SLD"() {
         given:
         File sld = new File(tmp, 'escaped.sld')

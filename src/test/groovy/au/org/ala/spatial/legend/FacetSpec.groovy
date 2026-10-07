@@ -1,6 +1,5 @@
 package au.org.ala.spatial.legend
 
-import spock.lang.PendingFeature
 import spock.lang.Specification
 
 /**
@@ -74,7 +73,6 @@ class FacetSpec extends Specification {
      * The numeric branch of isValid is "try { return includeRange == inside } finally { return false }";
      * a return in finally overrides the try, so every value is outside every range.
      */
-    @PendingFeature(reason = 'Facet.isValid returns false from a finally block for every numeric facet')
     def "a range facet accepts the values in its range"() {
         given:
         Facet f = Facet.parseFacet('el1:[1 TO 10]')

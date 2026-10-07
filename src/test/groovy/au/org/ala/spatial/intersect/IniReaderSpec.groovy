@@ -1,6 +1,5 @@
 package au.org.ala.spatial.intersect
 
-import spock.lang.PendingFeature
 import spock.lang.Specification
 import spock.lang.TempDir
 
@@ -112,7 +111,6 @@ Expression=a=b+c
      * after position 1, so one character sections are ignored (their keys go to the previous
      * section) and one character keys are stored under an empty key.
      */
-    @PendingFeature(reason = 'IniReader ignores one character section names and keys (off by one in the bracket and = positions)')
     def "one character section names and keys are read"() {
         when:
         IniReader ir = new IniReader(write('h.ini', '[A]\nx=1\n[Bb]\nyy=2\n'))

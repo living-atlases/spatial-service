@@ -2,7 +2,6 @@ package au.org.ala.spatial.legend
 
 import au.org.ala.spatial.scatterplot.BiocacheLegendObject
 import com.opencsv.CSVReader
-import spock.lang.PendingFeature
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -198,7 +197,6 @@ class LegendObjectSpec extends Specification {
      * maximums) instead of getCutoffMinFloats(), so every class but the first is written as
      * "name:[max TO max]" and the facet only matches the class maximum.
      */
-    @PendingFeature(reason = 'LegendObject.getTable uses getCutoffFloats() for the class minimums instead of getCutoffMinFloats()')
     def "the classes in the table of a numeric legend are ranges from the class minimum to the class maximum"() {
         given:
         LegendObject lo = LegendBuilder.legendFromDoubles((1..1000).collect { it as double } as double[],
@@ -243,7 +241,6 @@ class LegendObjectSpec extends Specification {
     }
 
     /** Category names in a CSV legend are parsed with Double.parseDouble without a try/catch. */
-    @PendingFeature(reason = 'BiocacheLegendObject.loadFromCsv throws NumberFormatException for category names that are not numbers')
     def "a biocache CSV legend of categories that are not numbers can be read"() {
         when:
         BiocacheLegendObject lo = new BiocacheLegendObject('species_group', 'name,red,green,blue,count\nBirds,255,0,0,10\n')
@@ -253,7 +250,6 @@ class LegendObjectSpec extends Specification {
     }
 
     /** getMinMax returns null when it found values ("if (!first) return null") and [0, 0] when it did not. */
-    @PendingFeature(reason = 'BiocacheLegendObject.getMinMax returns null when there are numeric values (inverted test)')
     def "the min and max of a numeric biocache legend are its smallest and largest values"() {
         when:
         BiocacheLegendObject lo = new BiocacheLegendObject('coordinate_uncertainty', CSV_LEGEND)

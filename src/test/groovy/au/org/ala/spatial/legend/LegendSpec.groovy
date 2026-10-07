@@ -1,7 +1,6 @@
 package au.org.ala.spatial.legend
 
 import au.org.ala.spatial.intersect.Grid
-import spock.lang.PendingFeature
 import spock.lang.Specification
 import spock.lang.TempDir
 import spock.lang.Unroll
@@ -107,7 +106,6 @@ class LegendSpec extends Specification {
      * parses as a separate statement, so every cutoff except the forced maximum is too high by
      * offset (for min = 0, the first class of 0..99 ends at 1.58 instead of 0.58).
      */
-    @PendingFeature(reason = 'the "- offset" in LegendEvenIntervalLog(10).generate is a separate statement, so cutoffs are not shifted back')
     def "LegendEvenIntervalLog and LegendEvenIntervalLog10 cutoffs are shifted back by the offset used for values < 1"() {
         given:
         float[] d = range(0, 99)
@@ -267,7 +265,6 @@ class LegendSpec extends Specification {
      * getColour returns colours[pos] without the alpha channel, and Legend.colours are all fully
      * transparent (0x00RRGGBB), so those cells disappear from images written with transparency.
      */
-    @PendingFeature(reason = 'Legend.getColour returns a transparent colour (no 0xFF000000) when the cutoffs around a value are equal')
     def "getColour(value) is opaque when cutoffs are repeated"() {
         given:
         Legend l = new LegendEqualArea()
@@ -283,7 +280,6 @@ class LegendSpec extends Specification {
      * "fit 0 to 10", but a = (d - min) / range is in [0, 1], so pos is always 0 (or 1 at max)
      * and the colour is extrapolated from the first two colours. FieldCreation uses (int) (a * 10).
      */
-    @PendingFeature(reason = 'static Legend.getColour(d, min, max) does not scale the position by 10')
     def "getColour(d, min, max) goes through the 11 legend colours"() {
         expect:
         (0..10).every { Legend.getColour(it * 10d, 0, 100) == (Legend.colours[it] | OPAQUE) }

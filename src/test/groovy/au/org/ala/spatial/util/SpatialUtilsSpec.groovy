@@ -17,7 +17,6 @@ import org.locationtech.jts.geom.Polygon
 import org.locationtech.jts.io.WKTReader
 import org.opengis.feature.simple.SimpleFeatureType
 import org.opengis.referencing.crs.CoordinateReferenceSystem
-import spock.lang.PendingFeature
 import spock.lang.Specification
 import spock.lang.TempDir
 import spock.lang.Unroll
@@ -168,7 +167,6 @@ ${body}
      * returns the placemark itself, which has no "Feature" attribute, and
      * placemarks.isEmpty() throws a NullPointerException (the upload fails with "KML parsing failure").
      */
-    @PendingFeature(reason = 'getKMLPolygonAsWKT throws a NullPointerException for a Placemark that is not in a Document or Folder')
     def "getKMLPolygonAsWKT reads a polygon placemark that is not in a Document or Folder"() {
         expect:
         reader.read(SpatialUtils.getKMLPolygonAsWKT(kml(PLACEMARK))).equalsExact(reader.read(EXPECTED_KML_WKT))

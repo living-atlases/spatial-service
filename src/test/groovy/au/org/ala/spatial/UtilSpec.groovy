@@ -1,7 +1,6 @@
 package au.org.ala.spatial
 
 import com.opencsv.CSVReader
-import spock.lang.PendingFeature
 import spock.lang.Specification
 import spock.lang.TempDir
 import spock.lang.Unroll
@@ -104,7 +103,6 @@ class UtilSpec extends Specification {
      * The rows have 15 columns (DATA_RESOURCE_UID and the intersected area were added) but the
      * header still has the original 13, so the last two columns of the CSV have no name.
      */
-    @PendingFeature(reason = 'the header of getDistributionsOrChecklists has 13 columns but the rows have 15')
     def "getDistributionsOrChecklists writes a header with one name per column"() {
         when:
         List<String[]> rows = parseCsv(Util.getDistributionsOrChecklists([distribution([:])]).join('\n'))
@@ -117,7 +115,6 @@ class UtilSpec extends Specification {
      * min_depth/max_depth are written with the Groovy elvis operator, so a depth of 0 (the surface,
      * common for marine species) is written as an empty field, the same as an unknown depth.
      */
-    @PendingFeature(reason = 'getDistributionsOrChecklists writes a depth of 0 as an empty field (Groovy truth)')
     def "getDistributionsOrChecklists writes a depth of 0"() {
         when:
         String[] row = parseCsv(Util.getDistributionsOrChecklists([distribution(min_depth: 0d, max_depth: 0d)])[1])[0]
@@ -179,7 +176,6 @@ class UtilSpec extends Specification {
      * list was a JSON array; on a Distributions domain object that is the static GORM get(id), so it
      * throws (or looks up a record with id "wmsurl") and the area report gets no checklist table.
      */
-    @PendingFeature(reason = 'getAreaChecklists reads the wmsurl with Distributions.get("wmsurl") (GORM get by id) instead of the property')
     def "getAreaChecklists writes one row per checklist area with the number of species"() {
         given:
         def list = [
@@ -221,7 +217,6 @@ class UtilSpec extends Specification {
      * replacement patterns. Maxent puts the user supplied species name in a value; a name with '$'
      * makes replaceAll throw and the Maxent output is not post processed.
      */
-    @PendingFeature(reason = 'replaceTextInFile uses replaceAll, so "$" or "\\\\" in a value throws or is lost and keys are regular expressions')
     def "replaceTextInFile replaces text literally"() {
         given:
         File f = new File(tmp, 'b.html')
@@ -247,7 +242,6 @@ class UtilSpec extends Specification {
     }
 
     /** afterPos > 0 is used as "the marker was found", which is false when it is at column 0. */
-    @PendingFeature(reason = 'readReplaceAfter does not replace the lines after a start marker found at the beginning of a line')
     def "readReplaceAfter replaces the lines after a start marker at the beginning of a line"() {
         given:
         File f = new File(tmp, 'd.html')
@@ -292,7 +286,6 @@ class UtilSpec extends Specification {
      * When the end marker is missing, indexOf returns -1 and the text from the start marker to
      * position endOldText.length() - 1 is replaced, which removes part of the start marker instead.
      */
-    @PendingFeature(reason = 'readReplaceBetween replaces the wrong text when the end marker is missing')
     def "readReplaceBetween leaves the file as is when the end marker is missing"() {
         given:
         File f = new File(tmp, 'h.html')
