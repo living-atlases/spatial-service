@@ -1,7 +1,6 @@
 package au.org.ala.spatial.scatterplot
 
 import au.org.ala.spatial.legend.LegendObject
-import spock.lang.PendingFeature
 import spock.lang.Specification
 
 import java.awt.Color
@@ -25,7 +24,6 @@ class LegendFieldPaintScaleSpec extends Specification {
         scale.upperBound == 1
     }
 
-    @PendingFeature(reason = 'getLowerBound/getUpperBound return 0 when values exist (inverted ternary)')
     def "the bounds are the min and max of the legend"() {
         given:
         def scale = new LegendFieldPaintScale(legendWith([5f, 20f] as float[]), Color.RED)
@@ -35,7 +33,6 @@ class LegendFieldPaintScaleSpec extends Specification {
         scale.upperBound == 20d
     }
 
-    @PendingFeature(reason = 'getLowerBound/getUpperBound index d[0]/d[1] of an empty min/max array')
     def "an empty min/max does not throw"() {
         given:
         def scale = new LegendFieldPaintScale(legendWith([] as float[]), Color.RED)
