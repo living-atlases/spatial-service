@@ -19,6 +19,8 @@ import au.org.ala.spatial.dto.IntersectionFile
 import au.org.ala.spatial.intersect.SimpleShapeFileCache
 import grails.plugin.cache.Cacheable
 import groovy.sql.Sql
+
+import java.sql.ResultSet
 import groovy.util.logging.Slf4j
 import org.apache.commons.lang.StringUtils
 import org.codehaus.jackson.map.ObjectMapper
@@ -128,8 +130,9 @@ class LayerService {
 
         List<Layers> layers = new ArrayList()
 
-        Sql.newInstance(dataSource).query(sql, [keywords: term], {
-            Layers layer = it as Layers
+        Sql.newInstance(dataSource).eachRow(sql, [keywords: term], { row ->
+            Layers layer = new Layers()
+            row.toRowResult().each { k, v -> if (layer.hasProperty(k as String)) layer[k as String] = v }
             fieldService.updateDisplayPaths([layer])
             layers.add(layer)
         })

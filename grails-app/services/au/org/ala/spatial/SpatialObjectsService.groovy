@@ -546,7 +546,7 @@ class SpatialObjectsService {
 
         String sql = "select fid, name, o.desc, pid, st_astext(the_geom), " +
                 "ST_DistanceSphere(ST_SETSRID(ST_Point( ? , ? ),4326), the_geom) as distance, " +
-                "degrees(Azimuth( ST_SETSRID(ST_Point( ? , ? ),4326), the_geom)) as degrees, " +
+                "degrees(ST_Azimuth( ST_SETSRID(ST_Point( ? , ? ),4326), the_geom)) as degrees, " +
                 "area_km " +
                 "from objects o where fid= ? and GeometryType(the_geom) = 'POINT' " +
                 "order by the_geom <#> st_setsrid(st_makepoint( ? , ? ),4326) limit ? "
@@ -700,7 +700,7 @@ class SpatialObjectsService {
     List<SpatialObjects> getObjectsByIdAndIntersection(String id, Integer limit, String intersectingPid) {
         String sql = "SELECT o.pid, o.name, o.desc AS description, o.fid AS fid, f.name AS fieldname, o.bbox, " +
                 "o.area_km, GeometryType(o.the_geom) as featureType FROM objects o inner join fields f on o.fid = f.id , (select the_geom as g from Objects where pid = ? ) t " +
-                "WHERE o.fid = ? AND and ST_Within(the_geom, g) limit ? "
+                "WHERE o.fid = ? AND ST_Within(the_geom, g) limit ? "
 
         List<SpatialObjects> objects = []
         Sql.newInstance(dataSource).query(sql, [intersectingPid, id, limit], { result ->
@@ -770,8 +770,8 @@ class SpatialObjectsService {
             // Then update objects table
             String sql2 = "UPDATE objects SET the_geom = ST_GeomFromText(?, 4326), " +
                     "bbox = ST_AsText(Box2D(ST_GeomFromText(?, 4326))), name = ?, \"desc\" = ?, area_km = ? where pid = ?"
-            boolean rowsUpdated = Sql.newInstance(dataSource).execute(sql2, [wkt, wkt, name, description, area_km, Integer.toString(pid)])
-            return (rowsUpdated)
+            int rowsUpdated = Sql.newInstance(dataSource).executeUpdate(sql2, [wkt, wkt, name, description, area_km, Integer.toString(pid)])
+            return rowsUpdated > 0
         } catch (DataAccessException ex) {
             throw new IllegalArgumentException("Error writing to database. Check validity of wkt.", ex)
         }
