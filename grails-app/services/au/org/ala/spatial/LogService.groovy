@@ -72,7 +72,7 @@ class LogService {
             def sql = "SELECT ${(columns + counts).join(",")} FROM Log ${where} ${groupBy} LIMIT ? OFFSET ?"
             def response = []
             Sql.newInstance(dataSource).query(sql.toString(), [params.max as Integer ?: 10, params.offset as Integer ?: 0], { ResultSet rs ->
-                if (rs.next()) {
+                while (rs.next()) {
                     response.add(toMap(rs, headers))
                 }
             })
@@ -81,7 +81,7 @@ class LogService {
             String sql = "SELECT user_id, category2, session_id, data, created FROM Log WHERE category2 = ? ORDER BY created DESC LIMIT ? OFFSET ?"
             def response = []
             Sql.newInstance(dataSource).query(sql.toString(), [params.category2, params.max as Integer ?: 10, params.offset as Integer ?: 0], { ResultSet rs ->
-                if (rs.next()) {
+                while (rs.next()) {
                     response.add(toMap(rs, ["user_id", "category2", "session_id", "data", "created"]))
                 }
             })
@@ -90,7 +90,7 @@ class LogService {
             String sql = "SELECT user_id, category2, session_id, data, created FROM Log ORDER BY created DESC LIMIT ? OFFSET ?"
             def response = []
             Sql.newInstance(dataSource).query(sql.toString(), [params.max as Integer ?: 10, params.offset as Integer ?: 0], { ResultSet rs ->
-                if (rs.next()) {
+                while (rs.next()) {
                     response.add(toMap(rs, ["user_id", "category2", "session_id", "data", "created"]))
                 }
             })
@@ -101,7 +101,7 @@ class LogService {
             String sql = "SELECT user_id, category2, session_id, data, created FROM Log ${where} ORDER BY created DESC LIMIT ? OFFSET ?"
             def response = []
             Sql.newInstance(dataSource).query(sql.toString(), [params.max as Integer ?: 10, params.offset as Integer ?: 0], { ResultSet rs ->
-                if (rs.next()) {
+                while (rs.next()) {
                     response.add(toMap(rs, ["user_id", "category2", "session_id", "data", "created"]))
                 }
             })
@@ -194,7 +194,7 @@ class LogService {
 
         if (params.startDate && params.endDate) {
             def start = DateTimeFormatter.ISO_LOCAL_DATE.parse(params.startDate as String)
-            def end = 'now'.equalsIgnoreCase(params.endDate as String) ? Instant.now() : DateTimeFormatter.ISO_LOCAL_DATE.parse(params.endDate as String)
+            def end = 'now'.equalsIgnoreCase(params.endDate as String) ? java.time.LocalDate.now() : DateTimeFormatter.ISO_LOCAL_DATE.parse(params.endDate as String)
             clause.add("created between '${DateTimeFormatter.ISO_LOCAL_DATE.format(start)}' and '${DateTimeFormatter.ISO_LOCAL_DATE.format(end)}'")
         }
 

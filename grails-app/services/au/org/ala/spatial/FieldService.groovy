@@ -86,11 +86,10 @@ class FieldService {
         } else {
             def maxSequenceNumber = requestIds
                     .findAll { it.endsWith("${spid}") }
-                    .collect { it.replaceFirst(/^.{2}/, '')
-                            .replaceAll("${spid}", "") }
+                    .collect { it.substring(2, it.length() - "${spid}".length()) }
                     .collect {it == '' ? 0 : it.toInteger()}
                     .max()
-            return (maxSequenceNumber ? maxSequenceNumber + 1 : '')
+            return (maxSequenceNumber != null ? maxSequenceNumber + 1 : '')
         }
     }
 

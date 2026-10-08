@@ -922,6 +922,7 @@ class ShapesController {
                 featureIndex = json["featureIdx"]
             } else {
                 render status: 400, text: "Feature Index is not provided"
+                return
             }
         }
         render processShapeFileFeatureRequest(json, null, shapeId, featureIndex) as JSON
@@ -1065,11 +1066,11 @@ class ShapesController {
                 WKTReader wktReader = new WKTReader()
                 Geometry geom = wktReader.read(wkt.toString())
 
-                // union all the polygons in a MULTIPOLYGON, if any
-                geom = geom.union()
-
                 // Use CCW for exterior rings. Normalizing will use the JTS default (CW). Reverse makes it CCW.
-                Geometry validGeom = GeomMakeValid.makeValid(geom)
+                Geometry validGeom = org.locationtech.jts.geom.util.GeometryFixer.fix(geom)
+
+                // union all the polygons in a MULTIPOLYGON, if any
+                validGeom = validGeom.union()
                 validGeom.normalize()
                 wkt = validGeom.reverse().toText()
             } catch (Exception e) {

@@ -220,7 +220,7 @@ class DistributionController {
     @Path("distribution/{id}")
     @Produces("application/json")
     def show() {
-        Long id = Long.parseLong(params.id)
+        Long id = params.long('id')
         if (id == null) {
             render status: 400
             return
@@ -237,9 +237,9 @@ class DistributionController {
 
     @Deprecated
     def lsidFirst(String lsid) {
-        Boolean noWkt = params.containsKey('nowkt') ? params.nowkt as Boolean : false
+        Boolean noWkt = params.containsKey('nowkt') ? params.nowkt.toString().toBoolean() : false
 
-        List distributions = distributionsService.queryDistributions([lsids: lsid?.toString()?.replace("https:/", "https://")], noWkt, Distributions.EXPERT_DISTRIBUTION)
+        List distributions = distributionsService.queryDistributions([lsids: lsid?.toString()?.replaceAll('(https?):/(?!/)', '\$1://')], noWkt, Distributions.EXPERT_DISTRIBUTION)
 
         if (distributions) {
             render distributions.get(0) as JSON
@@ -250,9 +250,9 @@ class DistributionController {
 
     @Deprecated
     def lsid(String lsid) {
-        Boolean noWkt = params.containsKey('nowkt') ? params.nowkt as Boolean : false
+        Boolean noWkt = params.containsKey('nowkt') ? params.nowkt.toString().toBoolean() : false
 
-        List distributions = distributionsService.queryDistributions([lsids: lsid?.toString()?.replace("https:/", "https://")], noWkt, Distributions.EXPERT_DISTRIBUTION)
+        List distributions = distributionsService.queryDistributions([lsids: lsid?.toString()?.replaceAll('(https?):/(?!/)', '\$1://')], noWkt, Distributions.EXPERT_DISTRIBUTION)
 
         if (distributions) {
             render distributions.get(0) as JSON
@@ -301,9 +301,9 @@ class DistributionController {
     @Produces("application/json")
     def lsids() {
         String lsid = params.lsid
-        Boolean noWkt = params.containsKey('nowkt') ? params.nowkt as Boolean : false
+        Boolean noWkt = params.containsKey('nowkt') ? params.nowkt.toString().toBoolean() : false
 
-        List distributions = distributionsService.queryDistributions([lsids: lsid?.toString()?.replace("https:/", "https://")], noWkt, Distributions.EXPERT_DISTRIBUTION)
+        List distributions = distributionsService.queryDistributions([lsids: lsid?.toString()?.replaceAll('(https?):/(?!/)', '\$1://')], noWkt, Distributions.EXPERT_DISTRIBUTION)
 
         if (distributions) {
             render distributions as JSON
@@ -318,7 +318,7 @@ class DistributionController {
 
     @Deprecated
     def lsidMapFirst(String lsid) {
-        List distributions = distributionsService.queryDistributions([lsids: lsid?.toString()?.replace("https:/", "https://")], true, Distributions.EXPERT_DISTRIBUTION)
+        List distributions = distributionsService.queryDistributions([lsids: lsid?.toString()?.replaceAll('(https?):/(?!/)', '\$1://')], true, Distributions.EXPERT_DISTRIBUTION)
 
         if (distributions) {
             Distributions distribution = distributions.get(0)
@@ -336,7 +336,7 @@ class DistributionController {
 
         List found = []
 
-        List distributions = distributionsService.queryDistributions([lsids: lsid?.toString()?.replace("https:/", "https://")], true, Distributions.EXPERT_DISTRIBUTION)
+        List distributions = distributionsService.queryDistributions([lsids: lsid?.toString()?.replaceAll('(https?):/(?!/)', '\$1://')], true, Distributions.EXPERT_DISTRIBUTION)
 
         if (distributions != null) {
             distributions.each { Distributions distribution ->
@@ -448,7 +448,7 @@ class DistributionController {
             and {
                 or {
                     eq('spcode', spcode)
-                    eq('lsid', lsid?.replace("https:/", "https://"))
+                    eq('lsid', lsid?.replaceAll('(https?):/(?!/)', '\$1://'))
                     eq('scientific', scientificName)
                 }
                 eq('type', Distributions.EXPERT_DISTRIBUTION)
