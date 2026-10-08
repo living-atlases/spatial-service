@@ -2,7 +2,6 @@ package au.org.ala.spatial
 
 import grails.testing.services.ServiceUnitTest
 import org.grails.spring.beans.factory.InstanceFactoryBean
-import spock.lang.PendingFeature
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -107,7 +106,6 @@ class TasksServiceValidationSpec extends Specification implements ServiceUnitTes
         outcome = valid ? 'valid' : 'rejected'
     }
 
-    @PendingFeature(reason = 'the "too large" / "too many" / "too long" messages print constraints.min instead of constraints.max')
     def "the error for a value over the maximum names the maximum"() {
         given:
         fieldService.getFieldById(_, false) >> new Fields(type: 'e', name: 'env')
@@ -127,13 +125,6 @@ class TasksServiceValidationSpec extends Specification implements ServiceUnitTes
         errors.layer
     }
 
-    /**
-     * The layer checks run inside "if (f == null)", so f?.type is always null there, and the
-     * conditions "constraints.contextual && !constraints.contextual.toBoolean()" are always false
-     * anyway, so the environmental / contextual / analysis restrictions of a process are never
-     * applied; an unknown layer id is not reported either.
-     */
-    @PendingFeature(reason = 'TasksService.validateInput checks layer types only when the field is null')
     def "a contextual layer is rejected by a process that only accepts environmental layers"() {
         given:
         fieldService.getFieldById('cl22', false) >> new Fields(id: 'cl22', type: 'c', name: 'States')
@@ -146,7 +137,6 @@ class TasksServiceValidationSpec extends Specification implements ServiceUnitTes
         errors.layer?.contains('cl22')
     }
 
-    @PendingFeature(reason = 'TasksService.validateInput checks layer types only when the field is null')
     def "an unknown layer is rejected"() {
         given:
         fieldService.getFieldById(_, false) >> null
@@ -156,5 +146,25 @@ class TasksServiceValidationSpec extends Specification implements ServiceUnitTes
 
         then:
         errors.layer
+    }
+
+    def "an environmental layer is accepted by a process that only accepts environmental layers"() {
+        given:
+        fieldService.getFieldById(_, false) >> new Fields(type: 'e', name: 'Rain')
+
+        expect:
+        !service.validateInput('Classification', [layer: ['el1', 'el2']], false).layer
+    }
+
+    def "an analysis layer is rejected by a process that does not accept analysis layers"() {
+        given: 'analysis layers have an intersection file but no field'
+        fieldService.getFieldById('aloc_1', false) >> null
+        layerService.getIntersectionFile('aloc_1') >> new au.org.ala.spatial.dto.IntersectionFile('aloc_1', '/data/aloc_1', null, 'aloc_1', 'aloc_1', 'Classification', null, 'a', null)
+
+        when:
+        def errors = service.validateInput('SpeciesByLayer', [layer: ['aloc_1']], false)
+
+        then:
+        errors.layer?.contains('aloc_1')
     }
 }
