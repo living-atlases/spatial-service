@@ -2,7 +2,6 @@ package au.org.ala.spatial.util
 
 import org.locationtech.jts.geom.Geometry
 import org.locationtech.jts.io.WKTReader
-import spock.lang.PendingFeature
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -84,7 +83,6 @@ class SpatialUtilsAreaSpec extends Specification {
      * JTS writes MULTIPOLYGON parts separated by ", " (e.g. Geometry.toText()), and that is what
      * AooEoo, FieldCreation, GridClassBuilder and the area report pass to calculateArea.
      */
-    @PendingFeature(reason = 'calculateArea only splits MULTIPOLYGON parts on ")),((" without spaces')
     def "calculateArea(wkt) of a MULTIPOLYGON written by JTS is the sum of its parts"() {
         given:
         Geometry g = new WKTReader().read('MULTIPOLYGON(((0 0,0 1,1 1,1 0,0 0)),((10 -30,10 -29,11 -29,11 -30,10 -30)))')
@@ -105,11 +103,7 @@ class SpatialUtilsAreaSpec extends Specification {
         near(SpatialUtils.calculateArea('POLYGON((0 0,0 2,2 2,2 0,0 0),(0.5 0.5,1.5 0.5,1.5 1.5,0.5 1.5,0.5 0.5))'), shell - hole)
     }
 
-    /**
-     * WKT does not mandate a ring orientation, so a hole drawn in the same direction as the shell is
-     * valid input (JTS reads it and reports the right area), but here it is added instead of subtracted.
-     */
-    @PendingFeature(reason = 'ring areas are summed with their orientation sign, so a hole with the same orientation as the shell is added')
+    /** WKT does not mandate a ring orientation, so a hole may be drawn in the same direction as the shell. */
     def "calculateArea(wkt) subtracts a hole that has the same orientation as the shell"() {
         given:
         double shell = SpatialUtils.calculateArea(boxWkt(0, 0, 2, 2))
@@ -152,7 +146,6 @@ class SpatialUtilsAreaSpec extends Specification {
     }
 
     @Unroll
-    @PendingFeature(reason = 'cellArea indexes the cache with floor(lat / res) * res instead of floor(lat / res), so only res = 1 is right')
     def "cellArea(#res, #lat) is the area of the #res degree cell that contains latitude #lat (res != 1)"() {
         given:
         double cellStart = Math.floor(Math.abs(lat) / res) * res
