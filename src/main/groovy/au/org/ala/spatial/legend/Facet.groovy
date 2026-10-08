@@ -296,7 +296,7 @@ class Facet implements Serializable {
                 double d = Double.parseDouble(v)
                 boolean inside = d >= min && d <= max
                 return includeRange == inside
-            } finally {
+            } catch (Exception ignored) {
                 return false
             }
         } else {
@@ -340,7 +340,7 @@ class Facet implements Serializable {
             try {
                 boolean inside = d >= min && d <= max
                 return includeRange == inside
-            } finally {
+            } catch (Exception ignored) {
                 return false
             }
         } else {
