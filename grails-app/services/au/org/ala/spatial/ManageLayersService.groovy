@@ -35,6 +35,8 @@ import org.springframework.scheduling.annotation.Scheduled
 
 import java.nio.file.Files
 import java.nio.file.attribute.BasicFileAttributes
+import org.hibernate.SessionFactory
+
 
 @Slf4j
 class ManageLayersService {
@@ -47,6 +49,7 @@ class ManageLayersService {
     TasksService tasksService
     SpatialConfig spatialConfig
     PublishService publishService
+    def sessionFactory
 
     def listUploadedFiles() {
         def list = []
@@ -987,6 +990,11 @@ class ManageLayersService {
 
                     //create default layers table entry, this updates layer.id
                     Task.withNewTransaction {
+                        Layers existingLayer = Layers.findById(layer.id)
+                        def session = sessionFactory.currentSession
+                        if (existingLayer) {
+                            session.evict(existingLayer)
+                        }
                         if (!layer.save(flush: true)) {
                             layer.errors.each {
                                 log.error(it)
