@@ -130,17 +130,11 @@ class LayerService {
 
         List<Layers> layers = new ArrayList()
 
-        Sql.newInstance(dataSource).query(sql, [keywords: term], { ResultSet rs ->
-            while (rs.next()) {
-                Layers layer = new Layers()
-                rs.fields.eachWithIndex { fld, Integer idx ->
-                    if (layer.hasProperty(fld.columnLabel)) {
-                        layer.setProperty(fld.columnLabel, rs.getObject(idx + 1))
-                    }
-                }
-                fieldService.updateDisplayPaths([layer])
-                layers.add(layer)
-            }
+        Sql.newInstance(dataSource).eachRow(sql, [keywords: term], { row ->
+            Layers layer = new Layers()
+            row.toRowResult().each { k, v -> if (layer.hasProperty(k as String)) layer[k as String] = v }
+            fieldService.updateDisplayPaths([layer])
+            layers.add(layer)
         })
 
         layers
