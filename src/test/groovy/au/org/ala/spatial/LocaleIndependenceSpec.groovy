@@ -2,7 +2,6 @@ package au.org.ala.spatial
 
 import au.org.ala.spatial.intersect.Grid
 import groovy.io.FileType
-import spock.lang.PendingFeature
 import spock.lang.Specification
 import spock.lang.TempDir
 
@@ -76,11 +75,7 @@ class LocaleIndependenceSpec extends Specification {
         !header.contains(',')
     }
 
-    /**
-     * writeHeader rounds the extents to 2 decimals, so grids whose edges are not on a 0.01 degree
-     * boundary (e.g. 30 arc second grids) are shifted when they are written and read back.
-     */
-    @PendingFeature(reason = 'Grid.writeHeader writes MinX/MaxX/MinY/MaxY with "%.2f"')
+    /** Grids whose edges are not on a 0.01 degree boundary (e.g. 30 arc second grids). */
     def "a grid header keeps the extents of a 30 arc second grid"() {
         given:
         String name = new File(tmp, 'g30').path
