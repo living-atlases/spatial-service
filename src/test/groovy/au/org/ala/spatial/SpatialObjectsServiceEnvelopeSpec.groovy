@@ -9,7 +9,6 @@ import org.geotools.data.simple.SimpleFeatureStore
 import org.geotools.feature.simple.SimpleFeatureBuilder
 import org.locationtech.jts.io.WKTReader
 import org.opengis.feature.simple.SimpleFeatureType
-import spock.lang.PendingFeature
 import spock.lang.Specification
 import spock.lang.TempDir
 
@@ -79,7 +78,6 @@ class SpatialObjectsServiceEnvelopeSpec extends Specification {
         thrown(NumberFormatException)
     }
 
-    @PendingFeature(reason = "streamEnvelope passes the zip entry names 'as String' instead of 'as String[]' to Util.zip")
     def "an envelope can be downloaded as a zipped shapefile"() {
         given:
         writeEnvelope(124, 'MULTIPOLYGON(((1 1,1 2,2 2,2 1,1 1)))')
