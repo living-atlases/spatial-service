@@ -157,7 +157,7 @@ class SimpleRegion implements Serializable {
         //  each point has only one identical lat or long to previous point
         //  4 or 5 points (start and end points may be identical)
         if (((points.size() == 8 && (points.get(0) != points.get(6) || points.get(1) != points.get(7)))
-                || (points.size() == 5 && points.get(0) == points.get(8)
+                || (points.size() == 10 && points.get(0) == points.get(8)
                 && points.get(1) == points.get(9)))) {
 
             //get min/max long/lat
@@ -259,8 +259,8 @@ class SimpleRegion implements Serializable {
 
         bounding_box = new double[2][2]
         bounding_box[0][0] = points[0]
-        bounding_box[0][1] = points[2]
-        bounding_box[1][0] = points[1]
+        bounding_box[0][1] = points[1]
+        bounding_box[1][0] = points[2]
         bounding_box[1][1] = points[3]
     }
 
